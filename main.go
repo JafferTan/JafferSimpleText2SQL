@@ -30,6 +30,7 @@ func ChatWithGPT() string {
 	//os.Setenv("OPENAI_API_KEY", "sk-svcacct-z1y21xwzywlV-3xjRvI9QOd3C1vYVDJMjZRHj5EgME7z4Hp1cn3YqeGEI46CBT3BlbkFJGbu_tg5uKRFEQ7v1dNWB06o-wzZSHOxUMbOanuc5D31tK5e4JQ_2xStxq_OjwA")
 	//llm, err := openai.New(openai.WithBaseURL("https://dashscope.aliyuncs.com/compatible-mode/v1"))
 	prompt := "What would be a good company name for a company that makes colorful socks?"
+
 	completion, _ := llm.CallLLM(prompt)
 	return completion.Choices[0].Message.Content
 
