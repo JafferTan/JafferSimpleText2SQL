@@ -32,6 +32,7 @@ func ChatWithGPT() string {
 	prompt := "What would be a good company name for a company that makes colorful socks?"
 	completion, _ := llm.CallLLM(prompt)
 	return completion.Choices[0].Message.Content
+
 }
 
 func main() {
