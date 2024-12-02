@@ -67,6 +67,7 @@ func Text2SQL(g *gin.Context) {
 	text2SQL := ChatWithGPT(prompt)
 	fmt.Println(text2SQL)
 	var response Text2SQLResponse
+
 	json.Unmarshal([]byte(text2SQL), &response)
 	g.JSON(http.StatusOK, response)
 }
