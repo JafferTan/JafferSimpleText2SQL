@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/example/helloworld": {
-            "get": {
-                "description": "do ping",
+        "/example/Text2SQL": {
+            "post": {
+                "description": "Accepts user input in JSON format, binds it to the UserInput struct, and attempts to convert it to a relevant SQL query. If there is an error in parsing the JSON request body, it will be logged.",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,9 +25,20 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "Text2SQL"
                 ],
-                "summary": "ping example",
+                "summary": "Convert text to SQL query",
+                "parameters": [
+                    {
+                        "description": "The user input containing details for generating the SQL query. See the UserInput struct for details.",
+                        "name": "userInput",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.UserInput"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -35,6 +46,19 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.UserInput": {
+            "type": "object",
+            "required": [
+                "question"
+            ],
+            "properties": {
+                "question": {
+                    "type": "string"
                 }
             }
         }
@@ -51,8 +75,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	//LeftDelim:        "{{",
-	//RightDelim:       "}}",
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

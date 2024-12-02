@@ -1,12 +1,30 @@
 basePath: /api/v1
+definitions:
+  main.UserInput:
+    properties:
+      question:
+        type: string
+    required:
+    - question
+    type: object
 info:
   contact: {}
 paths:
-  /example/helloworld:
-    get:
+  /example/Text2SQL:
+    post:
       consumes:
       - application/json
-      description: do ping
+      description: Accepts user input in JSON format, binds it to the UserInput struct,
+        and attempts to convert it to a relevant SQL query. If there is an error in
+        parsing the JSON request body, it will be logged.
+      parameters:
+      - description: The user input containing details for generating the SQL query.
+          See the UserInput struct for details.
+        in: body
+        name: userInput
+        required: true
+        schema:
+          $ref: '#/definitions/main.UserInput'
       produces:
       - application/json
       responses:
@@ -14,7 +32,7 @@ paths:
           description: OK
           schema:
             type: string
-      summary: ping example
+      summary: Convert text to SQL query
       tags:
-      - example
+      - Text2SQL
 swagger: "2.0"
