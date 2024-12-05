@@ -36,7 +36,7 @@ func FindLevel1SceneCode(question string) string {
 }
 
 func FindPromptBySceneCode(sceneCode string) string {
-	uri := "mongodb://localhost:55003"
+	uri := "mongodb://localhost:55002"
 	if uri == "" {
 		log.Fatal("You must set your 'MONGODB_URI' environmental variable. See\n\t https://docs.mongodb.com/drivers/go/current/usage-examples/#environment-variable")
 	}
@@ -58,7 +58,7 @@ func FindPromptBySceneCode(sceneCode string) string {
 }
 
 func findLevel1ScenesFromMongoDB() []*Scene {
-	uri := "mongodb://localhost:55003"
+	uri := "mongodb://localhost:55002"
 	if uri == "" {
 		log.Fatal("You must set your 'MONGODB_URI' environmental variable. See\n\t https://docs.mongodb.com/drivers/go/current/usage-examples/#environment-variable")
 	}

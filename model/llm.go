@@ -72,7 +72,7 @@ func CallLLM(prompt string) (Response, error) {
 	}
 	// 设置请求头
 	// 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey := "sk-xxx"
-	os.Setenv("DASHSCOPE_API_KEY", "sk-aed18c2e9cc348829064baa7eeb68f26")
+	os.Setenv("DASHSCOPE_API_KEY", "")
 	apiKey := os.Getenv("DASHSCOPE_API_KEY")
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 	req.Header.Set("Content-Type", "application/json")

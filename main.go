@@ -50,6 +50,7 @@ type DimInfo struct {
 func Text2SQL(g *gin.Context) {
 	var userInput UserInput
 	g.ShouldBindJSON(&userInput)
+	fmt.Println(userInput.Question)
 	res := ChatWithGPT(userInput.Question)
 	//1.先进行场景识别，将当前数据的场景获取得到，然后再进行下一步处理
 	var scencesRecognition SceneRecognition
@@ -67,7 +68,6 @@ func Text2SQL(g *gin.Context) {
 	text2SQL := ChatWithGPT(prompt)
 	fmt.Println(text2SQL)
 	var response Text2SQLResponse
-
 	json.Unmarshal([]byte(text2SQL), &response)
 	g.JSON(http.StatusOK, response)
 }
