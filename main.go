@@ -1,12 +1,13 @@
 package main
 
 import (
+	"JafferSimpleText2SQL/db"
 	docs "JafferSimpleText2SQL/docs"
 	"JafferSimpleText2SQL/elasticsearch"
 	llm "JafferSimpleText2SQL/model"
 	"JafferSimpleText2SQL/mongodb"
 	"encoding/json"
-	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"       // swagger embed files
 	"github.com/swaggo/gin-swagger" // gin-swagger scenarios
@@ -25,8 +26,9 @@ type SceneRecognition struct {
 }
 
 type Text2SQLResponse struct {
-	SQL     string  `json:"sql"`
-	DimInfo DimInfo `json:"diminfo"`
+	SQL       string     `json:"sql"`
+	DataFrame [][]string `json:"dataframe"`
+	DimInfo   DimInfo    `json:"diminfo"`
 }
 
 type DimInfo struct {
@@ -50,7 +52,6 @@ type DimInfo struct {
 func Text2SQL(g *gin.Context) {
 	var userInput UserInput
 	g.ShouldBindJSON(&userInput)
-	fmt.Println(userInput.Question)
 	res := ChatWithGPT(userInput.Question)
 	//1.先进行场景识别，将当前数据的场景获取得到，然后再进行下一步处理
 	var scencesRecognition SceneRecognition
@@ -66,9 +67,12 @@ func Text2SQL(g *gin.Context) {
 	prompt = strings.ReplaceAll(prompt, "{now}", formattedTime)
 	//3.生成SQL
 	text2SQL := ChatWithGPT(prompt)
-	fmt.Println(text2SQL)
+	//fmt.Println(text2SQL)
 	var response Text2SQLResponse
 	json.Unmarshal([]byte(text2SQL), &response)
+	df := db.ReadDataFrameFromPG(response.SQL)
+	response.DataFrame = df.Records()
+	//fmt.Println(df)
 	g.JSON(http.StatusOK, response)
 }
 
@@ -82,6 +86,7 @@ func ChatWithGPT(question string) string {
 
 func main() {
 	r := gin.Default()
+	r.Use(cors.Default())
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")
 	{
@@ -92,6 +97,6 @@ func main() {
 
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.Run(":8080")
+	r.Run("0.0.0.0:8080")
 
 }
